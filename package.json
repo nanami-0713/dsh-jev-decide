@@ -1,12 +1,13 @@
 {
   "name": "dsh-jev-decide",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DSH 插件：把 TypeSafe Jev（System One 决策模型）注册为 agent 工具 jev_decide。调用 https://api.typesafe.ai/v1/systemone，让 agent 在路由/分级/guardrail 等场景拿到带校准概率的结构化判定（noul/choice/score），而不是让大模型瞎猜。",
   "private": false,
   "type": "module",
   "main": "./lib/index.js",
   "files": [
     "lib",
+    "cordis.patch.yml",
     "README.md",
     "LICENSE"
   ],
@@ -18,6 +19,11 @@
   },
   "exports": {
     ".": "./lib/index.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
   },
   "keywords": [
     "dsh-plugin",

@@ -55,6 +55,10 @@ dsh plugin --profile web add dsh-jev-decide
 npm install dsh-jev-decide
 ```
 
+v0.1.2 起包内自带 `dsh.bundle`（根目录 `cordis.patch.yml`）：`dsh plugin add` 会自动把插件装配进 profile，无需手写任何接线；纯 `npm install` 仍只装包不装配。
+
+> **v0.1.1 手动接线用户升级注意**：已按方式三手写 insert 的 profile，不要再对它跑 `dsh plugin add`——两处注册同一 id 会报 `duplicate loader entry id`，整份 profile 无法启动；先注释/删除手动条目，再交给 bundle 自动装配。
+
 > peer 解析注意：宿主**不会**把捆绑的 `@deepseek-ai/dsh-tools` 注入插件的模块解析链。经 npm/pnpm 安装时 peer 会被自动物化；若以 `link:`/本地路径方式接入插件源码目录，需在插件目录内先跑一次 `npm install` 把 peer 物化（`>=0.1.0-rc.6` 的 semver 预发布匹配只会选到 0.1.0-rc.x 元组，属预期——插件只消费 `defineTool` 一个纯函数，跨宿主版本已实测兼容）。
 
 发版即自动发布：`git tag vX.Y.Z && git push --tags` → GitHub Actions 以 OIDC 免 token 发布（带 [provenance 签名](https://search.sigstore.dev/?logIndex=2890905882)），无需任何长期 npm 凭据。
@@ -65,7 +69,7 @@ npm install dsh-jev-decide
 
 1. 源码：`~/dsh/plugins/dsh-jev-decide/`
 2. `~/.dsh/profiles/web/package.json` 依赖：`"dsh-jev-decide": "link:~/dsh/plugins/dsh-jev-decide"`
-3. `~/.dsh/profiles/web/cordis.patch.yml`：`- insert: [- id: dsh-jev-decide, name: dsh-jev-decide]`
+3. `~/.dsh/profiles/web/cordis.patch.yml` 加一条 insert（内容同仓库根目录 `cordis.patch.yml`）：`- insert: [- id: dsh-jev-decide, name: dsh-jev-decide]`
 4. 因无 shell 无法建 pnpm symlink，`profiles/web/node_modules/dsh-jev-decide/` 放的是实体副本；下次 `pnpm install` 会把它规范成 link，无副作用。
 5. **生效需重启 DSH**（host 插件在进程启动时装配）。
 

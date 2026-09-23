@@ -1,0 +1,7 @@
+# dsh-jev-decide — DSH bundle patch。
+# `dsh plugin add` 读取 package.json 的 dsh.bundle.patch 应用本文件，
+# 把插件装配进 profile——等价于旧版 README「方式三」里手写的 insert 条目。
+# Host half: 注册 agent 工具 jev_decide（noul/choice/score → 校准概率）。
+- insert:
+    - id: dsh-jev-decide
+      name: dsh-jev-decide
