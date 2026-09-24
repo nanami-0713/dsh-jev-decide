@@ -94,3 +94,12 @@ Jev 发布三天内 GitHub 上已出现多个 DSH 接入实现，各有侧重：
 ## 定价参考
 
 Jev 1.13：$0.042/百万输入 token，输出免费；官方限流 250k tok/s、1200 req/min（[模型页](https://docs.typesafe.ai/models)）。
+
+## 开发 / 测试
+
+```sh
+npm install --no-save @deepseek-ai/dsh-tools   # 装上 peer 依赖（仅为 import）
+npm test                                        # node --test，14 个用例，零依赖、不发网络请求
+```
+
+`test/pure.test.js` 覆盖纯函数契约：三种题型的请求构造（`buildQuestion`/`buildPayload`）、参数校验报错路径、响应压缩（`summarize`）对 noul/choice/score 三种答案形状的解析。CI（`.github/workflows/test.yml`）在每次 push/PR 上运行同一套测试。
