@@ -15,6 +15,31 @@ test('buildQuestion: 省略 type 时默认 noul', () => {
 	);
 });
 
+test('buildQuestion: noul 传 yes/no 时构造 criteria {true,false}', () => {
+	assert.deepEqual(
+		buildQuestion({
+			question: '这篇稿件含金融违规承诺吗?',
+			yes: '出现保本、稳赚、必涨等收益承诺。',
+			no: '仅为常规行业信息与分析。',
+		}),
+		{
+			type: 'noul',
+			instructions: '这篇稿件含金融违规承诺吗?',
+			criteria: {
+				true: '出现保本、稳赚、必涨等收益承诺。',
+				false: '仅为常规行业信息与分析。',
+			},
+		},
+	);
+});
+
+test('buildQuestion: noul 只传 yes 时 false 补 null', () => {
+	assert.deepEqual(
+		buildQuestion({ question: 'q?', yes: 'counts as yes' }),
+		{ type: 'noul', instructions: 'q?', criteria: { true: 'counts as yes', false: null } },
+	);
+});
+
 test('buildQuestion: choice 把 options 展开为 criteria 键（值全 null）', () => {
 	assert.deepEqual(
 		buildQuestion({ type: 'choice', question: '路由到哪个团队?', options: ['billing', 'technical', 'sales'] }),
