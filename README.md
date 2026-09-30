@@ -27,6 +27,8 @@ jev_decide({
   type?: 'noul' | 'choice' | 'score',   // 默认 noul
   options?: string[],       // type=choice 时必填（≥2）
   levels?: string[],        // type=score 时必填（≥2，从低到高）
+  yes?: string,             // type=noul 时可选：什么算 YES（锐化校准）
+  no?: string,              // type=noul 时可选：什么算 NO
   model?: string,           // 默认 jev-latest（当前 jev-1.13.0）
 }) → { model, type, answer, confidence?, probabilities?, usage }
 ```
@@ -99,7 +101,7 @@ Jev 1.13：$0.042/百万输入 token，输出免费；官方限流 250k tok/s、
 
 ```sh
 npm install --no-save @deepseek-ai/dsh-tools   # 装上 peer 依赖（仅为 import）
-npm test                                        # node --test，14 个用例，零依赖、不发网络请求
+npm test                                        # node --test，16 个用例，零依赖、不发网络请求
 ```
 
 `test/pure.test.js` 覆盖纯函数契约：三种题型的请求构造（`buildQuestion`/`buildPayload`）、参数校验报错路径、响应压缩（`summarize`）对 noul/choice/score 三种答案形状的解析。CI（`.github/workflows/test.yml`）在每次 push/PR 上运行同一套测试。
